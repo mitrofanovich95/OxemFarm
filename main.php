@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Класс, реализующий животное
+ *
+ * @param  string     $animal_type     -> тип животного
+ * @param  string     $product_type    -> название продукта, производимого животным
+ * @param  integer    $lowest_product  -> минимальная производительность животного
+ * @param  integer    $highest_product -> максимальная производительность животного
+ *
+*/
 class Animal {
     protected $id;
     private $animal_type;
@@ -32,6 +41,11 @@ class Animal {
     public function setHighProduct($animal_type) { $this->highest_product = $highest_product; }
 }
 
+
+/**
+ * Класс, реализующий ферму, содержащую животных
+ *
+*/
 class Farm {
     private static $animals = [];
 
