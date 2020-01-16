@@ -2,66 +2,63 @@
 
 class Animal {
     protected $id;
-    public static $lowest_product;
-    public static $highest_product;
+    private $animal_type;
+    private $product_type;
+    private $lowest_product;
+    private $highest_product;
 
-    public function __construct() {
+    public function __construct($animal_type, $product_type, $lowest_product, $highest_product) {
       $this->id = rand(1000, 9999);
+      $this->animal_type = $animal_type;
+      $this->product_type = $product_type;
+      $this->lowest_product = $lowest_product;
+      $this->highest_product = $highest_product;
     }
 
     public function getProduct() {
-        return rand(static::$lowest_product, static::$highest_product);
+        return rand($this->lowest_product, $this->highest_product);
     }
 
-}
+    public function getType() { return $this->animal_type; }
+    public function setType($animal_type) { $this->animal_type = $animal_type; }
 
-class Cow extends Animal {
-    public static $lowest_product = 8;
-    public static $highest_product = 12;
-}
+    public function getProductType() { return $this->product_type; }
+    public function setProductType($product_type) { $this->product_type = $product_type; }
 
-class Chicken extends Animal {
-    public static $lowest_product = 0;
-    public static $highest_product = 1;
-}
+    public function getLowProduct() { return $this->lowest_product; }
+    public function setLowProduct($lowest_product) { $this->lowest_product = $lowest_product; }
 
+    public function getHighProduct() { return $this->highest_product; }
+    public function setHighProduct($animal_type) { $this->highest_product = $highest_product; }
+}
 
 class Farm {
-    private static $cows = [];
-    private static $chickens = [];
-    private static $milk = 0;
-    private static $eggs = 0;
+    private static $animals = [];
 
-    public static function setCow() {
-            self::$cows[] = new Cow();
+    public static function setAnimal($type, $product_type, $min, $max) {
+        self::$animals[$type][] = new Animal($type, $product_type, $min, $max);
     }
-    public static function setCows(int $count) {
+    public static function setAnimals($count, $type, $product_type, $min, $max) {
         for ($i = 0; $i < $count; $i++)
-          self::$cows[] = new Cow();
-    }
-
-    public static function setChicken() {
-        self::$chickens[] = new Chicken();
-    }
-    public static function setChickens(int $count) {
-        for ($i = 0; $i < $count; $i++)
-          self::$chickens[] = new Chicken();
+          self::$animals[$type][] = new Animal($type, $product_type, $min, $max);
     }
 
 
     public static function getProducts() {
-        for ($i = 0; $i < count(self::$cows); $i++)
-          self::$milk += self::$cows[$i]->getProduct();
+      // echo '<pre>'.print_r(self::$animals, true).'</pre>';
 
-        for ($i = 0; $i < count(self::$chickens); $i++)
-            self::$eggs += self::$chickens[$i]->getProduct();
+      foreach (self::$animals as $animals_type) {
+        $products = 0;
+        for ($i = 0; $i < count($animals_type); $i++) {
+          $products += $animals_type[$i]->getProduct();
+        }
+        echo $animals_type[0]->getType() . ': ' . $animals_type[0]->getProductType() . ' - ' . $products . '<br>';
+      }
 
-        echo "Всего молока: " . self::$milk . "<br>";
-        echo "Всего яиц: " . self::$eggs;
     }
 }
 
 
-Farm::setCows(10);
-Farm::setChickens(20);
+Farm::setAnimals(10, 'cow', 'Milk', 8, 12);
+Farm::setAnimals(20, 'chicken', 'Eggs', 0, 1);
 Farm::getProducts();
